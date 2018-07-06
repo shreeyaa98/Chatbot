@@ -1,9 +1,6 @@
 var sendForm = document.querySelector('#chatform'),
   textInput = document.querySelector('.chatbox'),
-  chatList = document.querySelector('.chatlist'),
-  userBubble = document.querySelectorAll('.userInput'),
-  botBubble = document.querySelectorAll('.bot__output'),
-  chatbotButton = document.querySelector(".submit-button");
+  chatList = document.querySelector('.chatlist');
 
 var input;
 var pos = [];
@@ -19,28 +16,20 @@ var chats_bot = new Array();
 var pattern = "";
 
 function setResponse(val) {
-
   console.log(val);
   var a = JSON.parse(val);
-  //console.log(a);
 
   var i = 0;
-
   for (i = 0; i < a.result.fulfillment.messages.length; i++) {
-
     if (a.result.fulfillment.messages[i].type == 0) {
-
       chats_bot.push(a.result.fulfillment.messages[i].type);
-
       pattern += "B";
       respond(a, i);
     }
-
   }
 }
 
 function send(input) {
-
   // if(start==0){
   //   console.log("Start is 0");
   //   var text='Hi';
@@ -88,7 +77,6 @@ function send(input) {
 
 //     });
 
-
 $(document).ready(function () {
   send('Hi');
   gather_skills();
@@ -123,74 +111,53 @@ var createBubble = function (input) {
 }
 
 function check_message(msg) {
-
   if (msg == "Now, what is your field of expertise ?") {
-
     //create buttons
     return 1;
   } else {
-
     return 0;
-
   }
-
 }
 
 function gather_skills() {
-
-
-
   $.ajax({
-
     url: "https://spreadsheets.google.com/feeds/list/1ACXXZiWctlrLT8XzoqLHnnmo8MDnj84Elo1N37REVeQ/3/public/values?alt=json",
     success: function (result) {
       parse_skills(result);
-
     }
   });
 }
 
 function parse_skills(data) {
-
   var values = [];
   var type = [];
   //console.log(data.feed.entry[i].gsx$type.$t);
-
-  $.each(data.feed.entry, function (i, item) {
-    //values=[];
+  $.each(data.feed.entry, function (i) {
     key = data.feed.entry[i].gsx$type.$t;
     //console.log(data.feed.entry[i].gsx$name.$t);
     if (type.indexOf(key) != -1) {
-
       //console.log("hi");
       values.push(data.feed.entry[i].gsx$name.$t);
       types[key] = values;
-
     } else {
-
       values = [];
       values.push(data.feed.entry[i].gsx$name.$t);
       type.push(key);
-
     }
     //console.log(types);
   });
-
-
 }
 
-function fun2(i, j) {
+function toggleSubSkills(j) {
   /*
     var elem=document.getElementById(i);
     elem.onclick = function(){
   */
   $("#" + j + "").toggle();
-
-
   //  };
 }
 
-function skills(j) {
+function skills() {
   k = 100;
   Object.keys(types).forEach(function (key) {
 
@@ -204,27 +171,17 @@ function skills(j) {
 }
 
 function gather_positions() {
-
-
-
   $.ajax({
-
     url: "https://spreadsheets.google.com/feeds/list/1WsJLKFcNMrl6sJLZZTIqHRhbAzbj1Cux3IGx9x2j3a0/4/public/values?alt=json",
     success: function (result) {
       parse_positions(result);
-
     }
   });
 }
 
 function parse_positions(data) {
-
-  var position = [];
-  var values = [];
   //console.log(data.feed.entry[i].gsx$type.$t);
-
-  $.each(data.feed.entry, function (i, item) {
-
+  $.each(data.feed.entry, function (i) {
     //questions.push(data.feed.entry[i].gsx$question.$t);
     //values=[];
     key = data.feed.entry[i].gsx$positionname.$t;
@@ -233,13 +190,11 @@ function parse_positions(data) {
     // console.log(data.feed.entry[i].gsx$jobdescription.$t);
 
     positions[key] = {};
-
     positions[key]["minexp"] = data.feed.entry[i].gsx$minimumexperience.$t;
     positions[key]["skills"] = data.feed.entry[i].gsx$skills.$t;
     positions[key]["description"] = data.feed.entry[i].gsx$jobdescription.$t;
-
-
   });
+
   key = ".NET Leader";
   positions[key] = {};
   positions[key]["minexp"] = "6";
@@ -289,13 +244,10 @@ function posit(i) {
 }
 
 function respond(e, i) {
-
   var response = document.createElement('li');
   response.classList.add('bot__output');
   msg_by_bot = e.result.fulfillment.messages[i].speech;
   console.log(msg_by_bot);
-
-
 
   response.innerHTML = msg_by_bot;
   chatList.appendChild(response);
@@ -303,27 +255,18 @@ function respond(e, i) {
   console.log(e.result.fulfillment.messages.length);
   console.log("Value of i is" + i);
   i = i + 1;
-
-
-
-
-
   if (check_message(msg_by_bot) == 1) {
     response.innerHTML += "<br>";
     i = 0;
     j = 100;
-
     Object.keys(types).forEach(function (key) {
-
       //console.log(key, types[key]);
       //var x="class=\"selectpicker\" data-style=\"btn-primary\"";
-      var s = "<button style=\"margin:5px\" id=\"" + i + "\" onclick=\"fun2(" + i + "," + j + ")\" class=\"btn btn-info\">" + key + "</button><div id=\"" + j + "\" hidden><select id=\"multiselect\" text=\"" + key + "\" multiple>";
-
+      var s = "<button style=\"margin:5px\" id=\"" + i + "\" onclick=\"toggleSubSkills(" + i + "," + j + ")\" class=\"btn btn-info\">" + key + "</button><div id=\"" + j + "\" hidden><select id=\"multiselect\" text=\"" + key + "\" multiple>";
       //var s = $("<select id=\"selectId\" name=\"selectName\" />");
 
       k = 0;
       for (var val in types[key]) {
-
         //console.log("------------------------------------------------");
         //console.log("Val=" +types[key][val]);
 
@@ -337,6 +280,7 @@ function respond(e, i) {
         k += 1;
         //console.log(s);    
       }
+
       s += "</select></div>";
 
       response.innerHTML += s;
@@ -345,8 +289,6 @@ function respond(e, i) {
 
       i += 1;
       j += 1;
-
-
       //"<a href='javascript:void(0)' onclick='fun1(\""+key+"\")'>"+key+"</a>  ";
     });
     response.innerHTML += "<br>";
@@ -357,8 +299,6 @@ function respond(e, i) {
   }
 
   if (e.result.parameters.number != undefined) {
-
-
     years = e.result.parameters.number[0];
     console.log(years);
     response.innerHTML += "<br>";
@@ -375,7 +315,6 @@ function respond(e, i) {
         response.innerHTML += "<br>"
       }
     }, 1000);
-
   }
 
   if (e.result.metadata.intentName == "View Positions - yes") {
@@ -391,68 +330,50 @@ function respond(e, i) {
         response.innerHTML += "<button style=\"margin:1px\" id=\"" + i + "\" class=\"btn btn-info\" onclick=\"posit(" + i + ")\">" + pos[i] + "</button>";
       }
     }
+    
     if (flag == 0) {
       var str = "No More Positions Available";
       response.innerHTML = "<strong style=\"color:red\">" + str + "</strong>";
       send("no");
     }
   }
-
-
-
 }
 
 function gather_questions() {
-
-
-
   $.ajax({
-
     url: "https://spreadsheets.google.com/feeds/list/1WsJLKFcNMrl6sJLZZTIqHRhbAzbj1Cux3IGx9x2j3a0/1/public/values?alt=json",
     success: function (result) {
       parse_questions(result);
-
     }
   });
 }
 
 function parse_questions(data) {
-  var question = [];
-
   //console.log(data.feed.entry[i].gsx$type.$t);
-
-  $.each(data.feed.entry, function (i, item) {
+  $.each(data.feed.entry, function (i) {
     //values=[];
     key = data.feed.entry[i].gsx$skill.$t;
     //console.log(data.feed.entry[i].gsx$name.$t);
     if (skill.indexOf(key) != -1) {
-
       //console.log("hi");
       questions[key].push(data.feed.entry[i].gsx$question.$t);
-
     } else {
-
       values = [];
       values.push(data.feed.entry[i].gsx$question.$t);
       skill.push(key);
       skills[key] = values;
-
     }
-
   });
 
   console.log(types);
 }
 
-function save_to_firebase(chats) {
-
+function save_to_firebase() {
   var ref = new Firebase('https://chatbot-6160d.firebaseio.com');
   console.log(ref);
-  var userRef = ref.child('User1').child('usr2').set('hi');
 }
 
 function get_from_database() {
-
   var ref = new Firebase('https://chatbot-6160d.firebaseio.com');
   ref = ref.child('User1');
 
@@ -462,33 +383,3 @@ function get_from_database() {
     console.log("Error: " + error.code);
   });
 }
-
-// function check_suggestion_chips(a){
-
-//   var i;
-//   var count=1;  
-//   for(i=0;i<a.result.fulfillment.messages.length;i++){
-//     console.log("Type="+a.result.fulfillment.messages[i].type);
-//     if(a.result.fulfillment.messages[i].type=="suggestion_chips"){
-//       count=0;
-//       break;
-//     } 
-//     else{
-//       count=1;
-//     }
-
-
-//   }
-//   console.log('count value'+count);
-//   return count;
-
-// }
-
-// function fun1(chip){
-//   //console.log();
-//   console.log('inside fun1');
-//   createBubble(chip);
-
-//   //$("#input").val(chip);
-
-// }
