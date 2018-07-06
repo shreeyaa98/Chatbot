@@ -17,7 +17,7 @@
   <link rel="stylesheet" type="text/css" href="bot.css">
 
   <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-app.js"></script>
-  
+
   <!-- Add additional services you want to use -->
   <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-auth.js"></script>
@@ -38,7 +38,6 @@
     };
 
     firebase.initializeApp(config);
-
   </script>
 </head>
 
@@ -53,14 +52,15 @@
 
       <div class="chatbox-area">
         <form action="" id="chatform">
-          <textarea class="chatbox" name="chatbox" resize: "none" minlength="2" />
+          <textarea class="chatbox" name="chatbox" resize: "none" minlength="2"></textarea>
           <input class="submit-button" type="submit" value="Send">
         </form>
       </div>
     </div>
   </div>
-</body>
 
-<script type="text/javascript" src="bot.js"></script>
+  <script type="text/javascript" src="bot.js"></script>
+
+</body>
 
 </html>
