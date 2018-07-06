@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Bot</title>
+  <title>Bot</title>
 
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" type="text/css"/>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css"
+    type="text/css" />
 
-	
-  
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/js/bootstrap-select.min.js"></script>
-  
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.7.5/js/bootstrap-select.min.js"></script>
 
   <link rel="stylesheet" type="text/css" href="bot.css">
 
   <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-app.js"></script>
+  
   <!-- Add additional services you want to use -->
   <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-auth.js"></script>
@@ -25,34 +25,25 @@
   <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-firestore.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-messaging.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-functions.js"></script>
-  
-  
-  
+
   <script>
-  // Initialize Firebase
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyAmygeNbdm042lskRwcKP7tsbFIqQR4wIc",
+      authDomain: "jobbot-d8652.firebaseapp.com",
+      databaseURL: "https://jobbot-d8652.firebaseio.com",
+      projectId: "jobbot-d8652",
+      storageBucket: "jobbot-d8652.appspot.com",
+      messagingSenderId: "323118362596"
+    };
 
-   
+    firebase.initializeApp(config);
 
-
-
-
-  var config = {
-    apiKey: "AIzaSyAmygeNbdm042lskRwcKP7tsbFIqQR4wIc",
-    authDomain: "jobbot-d8652.firebaseapp.com",
-    databaseURL: "https://jobbot-d8652.firebaseio.com",
-    projectId: "jobbot-d8652",
-    storageBucket: "jobbot-d8652.appspot.com",
-    messagingSenderId: "323118362596"
-  };
-  firebase.initializeApp(config);
-
-</script>
-
-
-
+  </script>
 </head>
+
 <body>
-<div class="page__main">
+  <div class="page__main">
     <div class="block--background">
       <div class="chatbot__overview">
         <ul class="chatlist">
@@ -60,14 +51,16 @@
         </ul>
       </div>
 
-
       <div class="chatbox-area">
         <form action="" id="chatform">
-            <textarea class="chatbox" name="chatbox" resize: "none" minlength="2"></textarea>
-            <input class="submit-button" type="submit" value="Send">
+          <textarea class="chatbox" name="chatbox" resize: "none" minlength="2" />
+          <input class="submit-button" type="submit" value="Send">
         </form>
       </div>
-</div>
+    </div>
+  </div>
 </body>
-	<script type="text/javascript" src="bot.js"></script>
+
+<script type="text/javascript" src="bot.js"></script>
+
 </html>
