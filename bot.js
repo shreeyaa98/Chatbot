@@ -262,7 +262,7 @@ function respond(e, i) {
     Object.keys(types).forEach(function (key) {
       //console.log(key, types[key]);
       //var x="class=\"selectpicker\" data-style=\"btn-primary\"";
-      var s = "<button style=\"margin:5px\" id=\"" + i + "\" onclick=\"toggleSubSkills(" + i + "," + j + ")\" class=\"btn btn-info\">" + key + "</button><div id=\"" + j + "\" hidden><select id=\"multiselect\" text=\"" + key + "\" multiple>";
+      var s = "<button style=\"margin:5px\" id=\"" + i + "\" onclick=\"toggleSubSkills(" + j + ")\" class=\"btn btn-info\">" + key + "</button><div id=\"" + j + "\" hidden><select id=\"multiselect\" text=\"" + key + "\" multiple>";
       //var s = $("<select id=\"selectId\" name=\"selectName\" />");
 
       k = 0;
@@ -330,7 +330,7 @@ function respond(e, i) {
         response.innerHTML += "<button style=\"margin:1px\" id=\"" + i + "\" class=\"btn btn-info\" onclick=\"posit(" + i + ")\">" + pos[i] + "</button>";
       }
     }
-    
+
     if (flag == 0) {
       var str = "No More Positions Available";
       response.innerHTML = "<strong style=\"color:red\">" + str + "</strong>";
