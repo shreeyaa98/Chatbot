@@ -30,19 +30,10 @@ function setResponse(val) {
 }
 
 function send(input) {
-  // if(start==0){
-  //   console.log("Start is 0");
-  //   var text='Hi';
-  //   start=1;
-  // }
-  // else{ 
   text = input;
   console.log("Text is" + input);
   pattern += "U";
-  //after some time
-
   chats_user.push(text);
-  //}
 
   $.ajax({
     type: "POST",
@@ -67,15 +58,6 @@ function send(input) {
   });
   //setResponse("Loading...");
 }
-
-// $(document).ready(function() {
-// 		setTimeout(function(){ 
-// 			$('#multiselect').multiselect({
-//             buttonWidth: '100px'
-//         });
-// 		 }, 8000);
-
-//     });
 
 $(document).ready(function () {
   send('Hi');
@@ -131,12 +113,10 @@ function gather_skills() {
 function parse_skills(data) {
   var values = [];
   var type = [];
-  //console.log(data.feed.entry[i].gsx$type.$t);
   $.each(data.feed.entry, function (i) {
     key = data.feed.entry[i].gsx$type.$t;
     //console.log(data.feed.entry[i].gsx$name.$t);
     if (type.indexOf(key) != -1) {
-      //console.log("hi");
       values.push(data.feed.entry[i].gsx$name.$t);
       types[key] = values;
     } else {
@@ -149,18 +129,12 @@ function parse_skills(data) {
 }
 
 function toggleSubSkills(j) {
-  /*
-    var elem=document.getElementById(i);
-    elem.onclick = function(){
-  */
   $("#" + j + "").toggle();
-  //  };
 }
 
 function skills() {
   k = 100;
   Object.keys(types).forEach(function (key) {
-
     $("#" + k + " option:selected").each(function () {
       selected_skills.push(types[key][($(this).val())]);
     });
@@ -182,13 +156,7 @@ function gather_positions() {
 function parse_positions(data) {
   //console.log(data.feed.entry[i].gsx$type.$t);
   $.each(data.feed.entry, function (i) {
-    //questions.push(data.feed.entry[i].gsx$question.$t);
-    //values=[];
     key = data.feed.entry[i].gsx$positionname.$t;
-    // console.log(key)
-    // console.log(data.feed.entry[i].gsx$minimumexperience.$t);
-    // console.log(data.feed.entry[i].gsx$jobdescription.$t);
-
     positions[key] = {};
     positions[key]["minexp"] = data.feed.entry[i].gsx$minimumexperience.$t;
     positions[key]["skills"] = data.feed.entry[i].gsx$skills.$t;
@@ -260,36 +228,20 @@ function respond(e, i) {
     i = 0;
     j = 100;
     Object.keys(types).forEach(function (key) {
-      //console.log(key, types[key]);
-      //var x="class=\"selectpicker\" data-style=\"btn-primary\"";
       var s = "<button style=\"margin:5px\" id=\"" + i + "\" onclick=\"toggleSubSkills(" + j + ")\" class=\"btn btn-info\">" + key + "</button><div id=\"" + j + "\" hidden><select id=\"multiselect\" text=\"" + key + "\" multiple>";
-      //var s = $("<select id=\"selectId\" name=\"selectName\" />");
-
       k = 0;
       for (var val in types[key]) {
-        //console.log("------------------------------------------------");
-        //console.log("Val=" +types[key][val]);
-
         var option = "<option value=" + k + ">" + types[key][val] + "</option>";
-
         console.log("\noption=" + option);
         s += option;
-
-        //$("<option />", {value: types[key][val], text: types[key][val]}).appendTo(s);
-
         k += 1;
-        //console.log(s);    
       }
 
       s += "</select></div>";
-
       response.innerHTML += s;
-
-      //console.log("#"+i+"");
 
       i += 1;
       j += 1;
-      //"<a href='javascript:void(0)' onclick='fun1(\""+key+"\")'>"+key+"</a>  ";
     });
     response.innerHTML += "<br>";
     str = "Submit";
@@ -349,13 +301,10 @@ function gather_questions() {
 }
 
 function parse_questions(data) {
-  //console.log(data.feed.entry[i].gsx$type.$t);
   $.each(data.feed.entry, function (i) {
-    //values=[];
     key = data.feed.entry[i].gsx$skill.$t;
     //console.log(data.feed.entry[i].gsx$name.$t);
     if (skill.indexOf(key) != -1) {
-      //console.log("hi");
       questions[key].push(data.feed.entry[i].gsx$question.$t);
     } else {
       values = [];
