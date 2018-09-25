@@ -30,7 +30,12 @@ var wel=false;
 var viewed_posits=[]
 var expect_ctc=false;
 var last_pos=false;
-
+var error_free=false;
+var revive=false;
+var revival=0;
+var transfer=false;
+var uid=0;
+var get_transfer=false;
 
 
 
@@ -155,8 +160,10 @@ function send(input) {
 		{
 		  text="Expected CTC"
 		}
+}
+	if (get_transfer){
 
-      }
+	}
     retreive.push(text)
     console.log("Text is" +input);
     $.ajax({
@@ -190,7 +197,14 @@ function send(input) {
     if (chars.indexOf('!') > -1) mask += '~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\';
     var result = '';
     for (var i = length; i > 0; --i) result += mask[Math.floor(Math.random() * mask.length)];
-    return result;
+    if(transfer){
+      return uid;
+    }
+    else{
+      uid=result;
+      transfer=true;
+      return result;
+    }
     }
 
     function change_notification(){
@@ -201,37 +215,34 @@ function send(input) {
       id=generate_uid(16,'#aA');
       console.log(id);
 
-      var check=true;
-      ref=ref.child('UID');
+      var check=false;
+      ref=ref.child('requests');
 
-        ref.on("value", function(snapshot) {
-       check=snapshot.val();
-       console.log(check);
+      ref.once("value", function(snapshot) {
+      no_of_children=snapshot.numChildren();
+      console.log("No of children"+no_of_children);
+
+      console.log(check);
       }, function (error) {
        console.log("Error: " + error.code);
        });
 
         setTimeout(function(){
 
-          if(check=='false'){
+          if(check==false){
           console.log('Inside if');
-          ref.set(id); 
+          ref.child(id).set(0);
           ref = new Firebase('https://jobbot-d8652.firebaseio.com');
-          // ref.child('UID').set('false');
           ref.child('Notification').set('0');
 
           upload_to_firebase(id);
 
-          //ref = new Firebase('https://jobbot-d8652.firebaseio.com');
-         
 
         }
         else{
           console.log(check);
         }
       },3000);
-
-
     }
 
 function check_intent(e){
@@ -264,7 +275,7 @@ function show_human_msg(msg)
 function send_to_revive(i){
 
     text=i;
-    console.log("Text is"+text);
+    console.log("Text is send to revive"+text);
 
 $.ajax({
 
@@ -278,6 +289,9 @@ $.ajax({
         data: JSON.stringify({ query: text, lang: "en", sessionId: "somerandomthing" }),
         success: function(data) {
           console.log("success");
+          console.log(JSON.stringify(data, undefined, 2))
+          revival+=1
+          doSetTimeout(revival)
         },
         error: function(data) {
           //setResponse("Internal Server Error");
@@ -295,10 +309,7 @@ function send_msg_to_app(msg){
   chats_user.push(msg);
   chatList.scrollTop = chatList.scrollHeight;
     
-  
-
-
-}
+  }
 
 
 $(document).ready(function() {
@@ -544,6 +555,7 @@ function respond(e,i) {
     console.log("bot list is")
     console.log(chats_bot);
     console.log(chats_user);
+    retreive.pop();
     console.log(retreive);
     app=true;
 	  var response = document.createElement('li');
@@ -647,7 +659,9 @@ function respond(e,i) {
 			dictionary.Years=0;
 			findpos(years);
             setTimeout(function(){
-            	if(pos.length>=0){
+            	console.log("positions are")
+            	console.log(pos)
+            	if(pos.length>0){
             		str="Current Jobs Available are:";
                response.innerHTML="<strong style=\"color:red\">"+str+"</strong>";
               for(var i in pos)
@@ -657,7 +671,11 @@ function respond(e,i) {
               response.innerHTML+="<br>"
             }
         }
-          },1000);
+        else{
+        	console.log("here")
+        		response.innerHTML+="<br>"
+          }},1000);
+        
 
 	}
     if(e.result.metadata.intentName=="Default Welcome Intent - custom - select.number - select.number"){
@@ -701,10 +719,12 @@ function respond(e,i) {
    		str=current_ctc+" lac";
    		dictionary.CurrentCTC=str;
    		expect_ctc=true;
+      console.log('some random shit')
+      console.log(expect_ctc)
    	}
 
    	 if (e.result.metadata.intentName=="View Positions - yes - no"){
-      	retreive_questions();
+      retreive_questions();
    		str="User did not mention";
    		dictionary.CurrentCTC=str;
    		expect_ctc=true;
@@ -728,12 +748,15 @@ function respond(e,i) {
    	}
 
    	  	if (e.result.metadata.intentName=="Availibility - no"){
-   		dictionary.CompanyName="No Job Offered"
-      	// ques=1;
-      	// wtf();
-  
+   					dictionary.CompanyName="No Job Offered"
+   		if(viewed_posits.length==pos.length)
+   	  		{
+   	 			response.innerHTML="Before we complete your expression of interest, you will have to take a quick test based on the skillset you have mentioned.Please Enter only  the answers to the questions as these answers will be assessed by us."
+   	  			      	ques=1;
+      					q();
+   	  		}
 
-   	}
+      	}
 
    	   	  	if (e.result.metadata.intentName=="Apply - no"){
   				if(viewed_posits.length<pos.length)
@@ -756,6 +779,13 @@ function respond(e,i) {
       					q();
    	  		}
  	}
+
+ 	 	 if (e.result.metadata.intentName=="Company - no - no"){
+
+   	 			//response.innerHTML="Before we complete your expression of interest, you will have to take a quick test based on the skillset you have mentioned.Please Enter only  the answers to the questions as these answers will be assessed by us."
+   	  			      	ques=1;
+      					q();
+   	  		 	}
    	   	
    	   	  	if (e.result.metadata.intentName=="Apply - yes"){
    				selected_posits.push(selected_pos);
@@ -839,6 +869,7 @@ function respond(e,i) {
       }
       console.log('why is anything printed '+pos[i])
       pos_left=true;
+      response.innerHTML+="<br>"
    response.innerHTML+="<button style=\"margin:1px\" id=\""+i+"\" class=\"btn btn-info\" onclick=\"posit("+i+")\">"+pos[i]+"</button>";
    
 
@@ -870,7 +901,6 @@ function retreive_questions() {
   			console.log(quest);
          question_to_ask.push(quest);
   		}
-  		//console.log(question_to_ask[0][0]);
   	}
         for (var i in question_to_ask){
         for (var j in question_to_ask[i]){
@@ -890,27 +920,42 @@ var chatBubble = document.createElement('li');
   
 }
 
-
+ function doSetTimeout(revival) {
+ 	if(revival>=retreive.length-1){
+ 			get_transfer=true;
+ 			send(retreive[revival])
+	}
+else
+{
+  send_to_revive(retreive[revival])
+}
+}
 function no(){
   send_msg_to_app("No");
   var chatBubble = document.createElement('li');
   chatBubble.classList.add('userInput');
   chatBubble.innerHTML = "No";
   chatList.appendChild(chatBubble)
-  
+  revival=0
   // show_human_msg("No");
-  console.log("no");
+  console.log("NNNNNNNNNOOOOOOOO");
   app=false;
-  for(i=0;i<retreive.length-2;i++){
-  	console.log(retreive[i]);
-    send_to_revive(retreive[i]);
-  }
-  send(retreive[i]);
+  console.log("Array")
+  var ref = new Firebase('https://jobbot-d8652.firebaseio.com');
+  ref=ref.child(id).child("pattern");
+
+      ref.once("value", function(snapshot) {
+      pattern=snapshot.val();
+      }, function (error) {
+       console.log("Error: " + error.code);
+       });
+
+  console.log(retreive)
+  doSetTimeout(revival)
 }
 function retrieve_human_msg(){
 
     var new_msg='';
-
   var ref = new Firebase('https://jobbot-d8652.firebaseio.com');
   ref=ref.child(id);
   console.log("outside");
