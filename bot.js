@@ -12,7 +12,7 @@ var types={};
 var selected_skills=[];
 var questions={};
 var positions={};
-var accessToken = "2520c2592722445b8d4de82cd407004b";
+var accessToken = "Your Access Token";
 var baseUrl = "https://api.dialogflow.com/v1/";
 var chats_user=new Array();
 var chats_bot=new Array();
@@ -47,7 +47,7 @@ function gather_questions(){
     
         $.ajax({
 
-          url: "https://spreadsheets.google.com/feeds/list/1WsJLKFcNMrl6sJLZZTIqHRhbAzbj1Cux3IGx9x2j3a0/1/public/values?alt=json", 
+          url: "Link to Spreadsheet to retrieve Question for Interviews", 
           success: function(result){
               parse_questions(result);
 
@@ -380,7 +380,7 @@ function gather_skills(){
     
         $.ajax({
 
-          url: "https://spreadsheets.google.com/feeds/list/1ACXXZiWctlrLT8XzoqLHnnmo8MDnj84Elo1N37REVeQ/3/public/values?alt=json", 
+          url: "Link to spreadsheet to retrieve skills", 
           success: function(result){
               parse_skills(result);
 
@@ -452,7 +452,7 @@ function gather_positions(){
     
         $.ajax({
 
-          url: "https://spreadsheets.google.com/feeds/list/1WsJLKFcNMrl6sJLZZTIqHRhbAzbj1Cux3IGx9x2j3a0/4/public/values?alt=json", 
+          url: "Link to spreadsheet to retrieve positions", 
           success: function(result){
               parse_positions(result);
 
